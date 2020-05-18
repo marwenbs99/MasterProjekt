@@ -9,6 +9,8 @@ using System.Web.Security;
 using System.Web.Services.Description;
 using System.Web.Security;
 using test5.Models;
+using System.Data.SqlClient;
+using System.Security.Principal;
 
 namespace test5.Controllers
 {
@@ -50,9 +52,13 @@ namespace test5.Controllers
                 #endregion
                 user.IsEmailVerified = false;
                 #region //Save to DataBase
+                
                 using (MyDataBaseEntities dc = new MyDataBaseEntities())
                 {
+
                     dc.Users.Add(user);
+                   
+                    
                     dc.SaveChanges();
                     //send Email to user
                     SendVerificationMail(user.Email, user.ActiovationCode.ToString());
