@@ -113,6 +113,7 @@ namespace test5.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(UserLogin login, string ReturnUrl="")
         {
+            bool Status = false;
             string message = "";
             ViewBag.Message = message;
             using (MyDataBaseEntities dc = new MyDataBaseEntities()) {
@@ -121,22 +122,32 @@ namespace test5.Controllers
                 {
                     if (string.Compare(Crypto.Hash(login.password),v.Password) == 0 )
                     {
-                        int timeout = login.rememberMe ? 525600 : 1; // 525600 min = 1 Year
-                        var ticket = new FormsAuthenticationTicket(login.Email, login.rememberMe, timeout);
-                        string encrypted = FormsAuthentication.Encrypt(ticket);
-                        var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
-                        cookie.Expires = DateTime.Now.AddMinutes(timeout);
-                        cookie.HttpOnly = true;
-                        Response.Cookies.Add(cookie);
-                        if (Url.IsLocalUrl(ReturnUrl))
+                        if (v.IsEmailVerified == true)
                         {
-                            return Redirect(ReturnUrl);
+                            int timeout = login.rememberMe ? 525600 : 1; // 525600 min = 1 Year
+                            var ticket = new FormsAuthenticationTicket(login.Email, login.rememberMe, timeout);
+                            string encrypted = FormsAuthentication.Encrypt(ticket);
+                            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
+                            cookie.Expires = DateTime.Now.AddMinutes(timeout);
+                            cookie.HttpOnly = true;
+                            Response.Cookies.Add(cookie);
+                            if (Url.IsLocalUrl(ReturnUrl))
+                            {
+                                Status = true;
+                                return Redirect(ReturnUrl);
 
+                            }
+                            else
+                            {
+                                Status = true;
+                                return RedirectToAction("Index", "Home");
+                            }
                         }
                         else
                         {
-                            return RedirectToAction("Index", "Home");
+                            message = "Email most be verified firsrt";
                         }
+                       
                     }
                     else
                     {
@@ -149,6 +160,8 @@ namespace test5.Controllers
                     message = " invalid credential provided";
                 }
             }
+            ViewBag.Message = message;
+            ViewBag.Status = Status;
             return View();
         }
         //Logout
