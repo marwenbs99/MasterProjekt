@@ -4,7 +4,7 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login hhh</h2>
+<h2>Login</h2>
 @if (ViewBag.Status == false)
 {
     if (ViewBag.Message != null)
@@ -66,6 +66,8 @@ using (Html.BeginForm())
 
 <div>
     @Html.ActionLink("Register now", "Registration", "User")
+    <br/>
+    @Html.ActionLink("Forgot Password ?", "ForgotPassword", "User")
 </div>
 }
 
