@@ -7,10 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.Services.Description;
-using System.Web.Security;
 using test5.Models;
 using System.Data.SqlClient;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
+
 
 namespace test5.Controllers
 {
@@ -133,21 +134,32 @@ namespace test5.Controllers
                         if (v.IsEmailVerified == true)
                         {
                             int timeout = login.rememberMe ? 525600 : 1; // 525600 min = 1 Year
-                            var ticket = new FormsAuthenticationTicket(login.Email, login.rememberMe, timeout);
+                            var ticket = new FormsAuthenticationTicket(v.FirstName, login.rememberMe, timeout);
                             string encrypted = FormsAuthentication.Encrypt(ticket);
                             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
                             cookie.Expires = DateTime.Now.AddMinutes(timeout);
                             cookie.HttpOnly = true;
                             Response.Cookies.Add(cookie);
+
+                            HttpCookie cookie1 = new HttpCookie("Mycookie");
+                            cookie1.Value = v.Email;
+                            cookie1.Expires = DateTime.Now.AddDays(30);
+                            cookie1.HttpOnly = true;
+                            Response.Cookies.Add(cookie1);
+                          
+
+
+
                             if (Url.IsLocalUrl(ReturnUrl))
                             {
                                 Status = true;
                                 return Redirect(ReturnUrl);
-
+                               
                             }
                             else
                             {
                                 Status = true;
+                                
                                 return RedirectToAction("Index", "Home");
                             }
                         }
@@ -178,10 +190,12 @@ namespace test5.Controllers
         [HttpPost]
         public ActionResult logout()
         {
+
             FormsAuthentication.SignOut();
+           
             return RedirectToAction("Login", "User");
 
-          return View();
+          
         }
 
         [NonAction]
@@ -306,7 +320,7 @@ namespace test5.Controllers
             //verify the reset password link
             //find accound associeted with this link
             //redirect to reset password page
-            return View();
+           
         }
 
 
@@ -328,6 +342,7 @@ namespace test5.Controllers
                         dc.Configuration.ValidateOnSaveEnabled = false;
                         dc.SaveChanges();
                         message = "New Password update succesfully";
+                        
                     }
                     
                 }
@@ -339,7 +354,8 @@ namespace test5.Controllers
             }
 
             ViewBag.Message = message;
-            return View();
+            return RedirectToAction("Login", "User");
+         //   return View(model);
         }
     }
     
