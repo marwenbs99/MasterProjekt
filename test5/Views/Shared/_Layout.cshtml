@@ -23,8 +23,41 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
                     <li>@Html.ActionLink("À propos de", "About", "Home")</li>
+                    <li>@Html.ActionLink("Calander", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+
+
+
                 </ul>
+
+
+                @if (Request.IsAuthenticated)
+                {
+                    <p class="navbar-text pull-right">
+                        Hello, @Html.ActionLink(User.Identity.Name, "EditPassword", "User")
+                    </p>
+
+                }
+                else
+                {
+                    <ul class="nav navbar-nav pull-right">
+
+                        <li>@Html.ActionLink("Log in", "Login", "User")</li>
+                        <li>@Html.ActionLink("Registration", "Registration", "User")</li>
+
+                    </ul>
+                }
+
+
+
+            </div>
+            <div class="navbar-collapse collapse">
+               
+
+            </div>
+            <div class="navbar-collapse">
+
+
             </div>
         </div>
     </div>
