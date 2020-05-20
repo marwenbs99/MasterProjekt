@@ -5,6 +5,14 @@
 
 <h2>Index</h2>
 Welcome @HttpContext.Current.User.Identity.Name
+
+
+
+
+<h1>    @ViewBag.Message </h1>
+
+
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("Logout", "User", FormMethod.Post, new { id = "LogoutForm" }))

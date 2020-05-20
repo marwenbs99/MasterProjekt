@@ -7,10 +7,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.Services.Description;
-using System.Web.Security;
 using test5.Models;
 using System.Data.SqlClient;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Http;
+
 
 namespace test5.Controllers
 {
@@ -25,6 +26,7 @@ namespace test5.Controllers
         {
             return View();
         }
+
         //Registration Post Action
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -61,7 +63,7 @@ namespace test5.Controllers
                     
                     dc.SaveChanges();
                     //send Email to user
-                    SendVerificationMail(user.Email, user.ActiovationCode.ToString());
+                    SendVerificationMail(user.Email, user.ActiovationCode.ToString(), "VerifyAccount");
                     message = "Registration successfully done, Account activation link" + "Has been sent to your email adresse :" + user.Email;
                     Status = true;
 
@@ -83,6 +85,7 @@ namespace test5.Controllers
         
             return View(user);
         }
+
         // Verify account
         [HttpGet]
         public ActionResult VerifyAccount(String ID) {
@@ -131,21 +134,32 @@ namespace test5.Controllers
                         if (v.IsEmailVerified == true)
                         {
                             int timeout = login.rememberMe ? 525600 : 1; // 525600 min = 1 Year
-                            var ticket = new FormsAuthenticationTicket(login.Email, login.rememberMe, timeout);
+                            var ticket = new FormsAuthenticationTicket(v.FirstName, login.rememberMe, timeout);
                             string encrypted = FormsAuthentication.Encrypt(ticket);
                             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, encrypted);
                             cookie.Expires = DateTime.Now.AddMinutes(timeout);
                             cookie.HttpOnly = true;
                             Response.Cookies.Add(cookie);
+
+                            HttpCookie cookie1 = new HttpCookie("Mycookie");
+                            cookie1.Value = v.Email;
+                            cookie1.Expires = DateTime.Now.AddDays(30);
+                            cookie1.HttpOnly = true;
+                            Response.Cookies.Add(cookie1);
+                          
+
+
+
                             if (Url.IsLocalUrl(ReturnUrl))
                             {
                                 Status = true;
                                 return Redirect(ReturnUrl);
-
+                               
                             }
                             else
                             {
                                 Status = true;
+                                
                                 return RedirectToAction("Index", "Home");
                             }
                         }
@@ -170,16 +184,20 @@ namespace test5.Controllers
             ViewBag.Status = Status;
             return View();
         }
+
         //Logout
         [Authorize]
         [HttpPost]
         public ActionResult logout()
         {
+
             FormsAuthentication.SignOut();
+           
             return RedirectToAction("Login", "User");
 
-          return View();
+          
         }
+
         [NonAction]
         public bool IsEmailExist(String Email)
         { 
@@ -190,16 +208,29 @@ namespace test5.Controllers
             }
         }
 
+        //SendVerification Email procedure
         [NonAction]
-        public void SendVerificationMail(String mail, string ActivationCode)
+        public void SendVerificationMail(String mail, string ActivationCode, string emailfor)
         {
-            var VerifyUrl = "/User/VerifyAccount/" + ActivationCode;
+            var VerifyUrl = "/User/"+emailfor+"/" + ActivationCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, VerifyUrl);
             var fromEmail = new MailAddress("coboye1992@hotmail.fr", "Master Projekt");
             var toEmail = new MailAddress(mail);
             var fromEmailPassword = "97815709";
-            String subject = "Your account is successfully created!";
-            String body = "<br/><br/> We are excited to tell you that your account is"+ "successfully created. Please click on the below link to verify your account"+ "<br/><br/> <a href='" + link+"'>"+link+"</a>";
+            String subject = "";
+            String body = "";
+
+            if (emailfor == "VerifyAccount")
+            {
+                 subject = "Your account is successfully created!";
+                 body = "<br/><br/> We are excited to tell you that your account is" + "successfully created. Please click on the below link to verify your account" + "<br/><br/> <a href='" + link + "'>" + link + "</a>";
+            }
+            else if(emailfor == "ResetPassword")
+            {
+                subject = "Password Reset";
+                body = "Hi,<br/><br/>We got request for reset your account-password. Please click on the below link to reset your password "+ "<br/><br/><a href=" + link + "> Reset Password link </a>";
+            }
+           
             var smtp = new SmtpClient
             {
                 Host = "smtp.live.com",
@@ -220,6 +251,113 @@ namespace test5.Controllers
             })
                 smtp.Send(message);
 
+        }
+
+        //Password forget--------------------------------------------------------------------------------
+        public ActionResult Forgotpassword()
+        {
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Forgotpassword(string email)
+        {
+            //verify email exist
+            //generate reset password link
+            //send Email
+            string message = "";
+            bool Status = false;
+            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var account = dc.Users.Where(a => a.Email == email).FirstOrDefault();
+                if(account != null)
+                {
+                    //send Email for reset password
+                    string ResetCode = Guid.NewGuid().ToString();
+                    SendVerificationMail(account.Email, ResetCode,"ResetPassword");
+                    account.ResetPasswordCode = ResetCode;
+                    //This line i have added here to avoid confirm password not mutch issue, as we have added a confirm password proprerty
+                    dc.Configuration.ValidateOnSaveEnabled = false;
+                    dc.SaveChanges();
+                    message = "Reset Password link has been sent to your Email";
+                }
+                else
+                {
+                    message = "Account not found";
+                }
+            }
+            ViewBag.Message = message;
+
+            return View();
+        }
+
+
+        
+        public ActionResult ResetPassword(string ID)
+        {
+           
+                using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var v = dc.Users.Where(a => a.ResetPasswordCode == ID).FirstOrDefault();
+                if (v != null)
+                {
+                    ResetPasswordModel model = new ResetPasswordModel();
+                    model.ResetCode = ID;
+                    return View(model);
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+
+            }
+
+            
+    }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            var message = "";
+            if(model.NewPassword.Length >= 6 && model.NewPassword == model.ConfirmPassword) {
+
+
+                if (ModelState.IsValid)
+                {
+                    using (MyDataBaseEntities dc = new MyDataBaseEntities())
+                    {
+                        var user = dc.Users.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                        if (user != null)
+                        {
+                            user.Password = Crypto.Hash(model.NewPassword);
+                            user.ResetPasswordCode = "";
+                            dc.Configuration.ValidateOnSaveEnabled = false;
+                            dc.SaveChanges();
+                            message = "New Password update succesfully";
+                            return RedirectToAction("Login", "User");
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    message = "Something invalide ";
+                }
+
+
+            }
+            
+           
+
+            ViewBag.Message = message;
+          
+           return View(model);
         }
     }
     

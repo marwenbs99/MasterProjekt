@@ -18,9 +18,10 @@ namespace test5.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public Nullable<System.DateTime> DateOfBirth { get; set; }
+        public System.DateTime DateOfBirth { get; set; }
         public string Password { get; set; }
         public bool IsEmailVerified { get; set; }
         public System.Guid ActiovationCode { get; set; }
+        public string ResetPasswordCode { get; set; }
     }
 }
