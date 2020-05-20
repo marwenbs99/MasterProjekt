@@ -297,8 +297,8 @@ namespace test5.Controllers
         
         public ActionResult ResetPassword(string ID)
         {
-
-            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+           
+                using (MyDataBaseEntities dc = new MyDataBaseEntities())
             {
                 var v = dc.Users.Where(a => a.ResetPasswordCode == ID).FirstOrDefault();
                 if (v != null)
@@ -314,14 +314,8 @@ namespace test5.Controllers
 
             }
 
-
-
-
-            //verify the reset password link
-            //find accound associeted with this link
-            //redirect to reset password page
-           
-        }
+            
+    }
 
 
 
@@ -330,32 +324,40 @@ namespace test5.Controllers
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
             var message = "";
-            if (ModelState.IsValid)
-            {
-                using(MyDataBaseEntities dc = new MyDataBaseEntities())
+            if(model.NewPassword.Length >= 6 && model.NewPassword == model.ConfirmPassword) {
+
+
+                if (ModelState.IsValid)
                 {
-                    var user = dc.Users.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
-                    if (user != null)
+                    using (MyDataBaseEntities dc = new MyDataBaseEntities())
                     {
-                        user.Password = Crypto.Hash(model.NewPassword);
-                        user.ResetPasswordCode = "";
-                        dc.Configuration.ValidateOnSaveEnabled = false;
-                        dc.SaveChanges();
-                        message = "New Password update succesfully";
-                        
+                        var user = dc.Users.Where(a => a.ResetPasswordCode == model.ResetCode).FirstOrDefault();
+                        if (user != null)
+                        {
+                            user.Password = Crypto.Hash(model.NewPassword);
+                            user.ResetPasswordCode = "";
+                            dc.Configuration.ValidateOnSaveEnabled = false;
+                            dc.SaveChanges();
+                            message = "New Password update succesfully";
+                            return RedirectToAction("Login", "User");
+                        }
+
                     }
-                    
+
+                }
+                else
+                {
+                    message = "Something invalide ";
                 }
 
+
             }
-            else
-            {
-                message = "Something invalide ";
-            }
+            
+           
 
             ViewBag.Message = message;
-            return RedirectToAction("Login", "User");
-         //   return View(model);
+          
+           return View(model);
         }
     }
     
