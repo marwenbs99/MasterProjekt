@@ -33,29 +33,27 @@
 
                 @if (Request.IsAuthenticated)
                 {
-                    <p class="navbar-text pull-right">
-                        Hello, @Html.ActionLink(User.Identity.Name, "EditPassword", "User")
-                    </p>
+            <p class="navbar-text pull-right">
+                Hello, @Html.ActionLink(User.Identity.Name, "EditPassword", "User")
+                <button onclick="javascript:document.getElementById('LogoutForm').submit()" class="btn btn-link">Logout</button>
 
-                }
-                else
-                {
-                    <ul class="nav navbar-nav pull-right">
+            </p>
+                   
+                        }
+                        else
+                        {
+                        <ul class="nav navbar-nav pull-right">
 
-                        <li>@Html.ActionLink("Log in", "Login", "User")</li>
-                        <li>@Html.ActionLink("Registration", "Registration", "User")</li>
+                            <li>@Html.ActionLink("Log in", "Login", "User")</li>
+                            <li>@Html.ActionLink("Registration", "Registration", "User")</li>
 
-                    </ul>
-                }
+                        </ul>
+                        }
 
 
 
-            </div>
-            <div class="navbar-collapse collapse">
-               
-
-            </div>
-            <div class="navbar-collapse">
+                </div>
+              <div class="navbar-collapse">
 
 
             </div>
