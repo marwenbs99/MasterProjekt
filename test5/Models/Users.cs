@@ -23,5 +23,6 @@ namespace test5.Models
         public bool IsEmailVerified { get; set; }
         public System.Guid ActiovationCode { get; set; }
         public string ResetPasswordCode { get; set; }
+        public byte[] Image { get; set; }
     }
 }

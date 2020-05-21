@@ -21,5 +21,7 @@ namespace test5.Models
         public string password { get; set; }
         [Display(Name = "Remember me")]
         public bool rememberMe { get; set; }
+
+        
     }
 }
