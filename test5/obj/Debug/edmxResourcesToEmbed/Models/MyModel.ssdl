@@ -13,6 +13,7 @@
     <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
     <Property Name="ActiovationCode" Type="uniqueidentifier" Nullable="false" />
     <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="Image" Type="varbinary(max)" />
   </EntityType>
   <EntityContainer Name="MyDataBaseModelStoreContainer">
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />

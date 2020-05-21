@@ -11,7 +11,7 @@ using test5.Models;
 using System.Data.SqlClient;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
-
+using System.IO;
 
 namespace test5.Controllers
 {
@@ -359,6 +359,54 @@ namespace test5.Controllers
           
            return View(model);
         }
+        [Authorize]
+        [HttpGet]
+        public ActionResult EditProfile()
+        {
+            string mail = "";
+            mail = Request.Cookies["Mycookie"].Value;
+            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+           {
+                var v = dc.Users.Where(a => a.Email == mail).FirstOrDefault();
+              ViewBag.that = v.FirstName +" "+ v.LastName;
+
+            }
+
+
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditProfile(UserProfile up)
+        {
+
+            string message = "";
+            string email = Request.Cookies["Mycookie"].Value;
+            if (ModelState.IsValid)
+            {
+                using(MyDataBaseEntities dc = new MyDataBaseEntities()) { 
+                var v = dc.Users.Where(a => a.Email == email).FirstOrDefault();
+                    ViewBag.that = v.FirstName + " " + v.LastName;
+                    v.Password = Crypto.Hash(up.password);
+                    dc.Configuration.ValidateOnSaveEnabled = false;
+                    dc.SaveChanges();
+                    message = "New Password update succesfully";
+
+
+                }
+
+            }
+            else
+            {
+                message = "Something invalide";
+            }
+
+            ViewBag.Message = message;
+                return View();
+        }
+
+
+
+
     }
     
 }

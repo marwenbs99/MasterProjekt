@@ -18,6 +18,7 @@
           <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
           <Property Name="ActiovationCode" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
+          <Property Name="Image" Type="varbinary(max)" />
         </EntityType>
         <EntityContainer Name="MyDataBaseModelStoreContainer">
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -39,6 +40,7 @@
           <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
           <Property Name="ActiovationCode" Type="Guid" Nullable="false" />
           <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityContainer Name="MyDataBaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.Users" />
@@ -52,6 +54,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="MyDataBaseModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />

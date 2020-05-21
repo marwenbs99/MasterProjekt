@@ -13,6 +13,7 @@
     <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
     <Property Name="ActiovationCode" Type="Guid" Nullable="false" />
     <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
   </EntityType>
   <EntityContainer Name="MyDataBaseEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Users" EntityType="Self.Users" />
