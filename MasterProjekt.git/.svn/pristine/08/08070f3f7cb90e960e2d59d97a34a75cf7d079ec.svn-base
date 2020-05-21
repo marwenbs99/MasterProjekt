@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "VerifyAccount";
+}
+
+<h2>VerifyAccount</h2>
+
+@if (Convert.ToBoolean(ViewBag.Status) == true)
+{
+    <div class= "alert alert-success" >
+        <strong>Success! </strong> Your Account has been activated successfully. Click here to @Html.ActionLink("Login","Login","User")
+
+    </div>
+
+}
+else
+{
+<div class="alert alert-danger">
+    <strong>Error!</strong>@ViewBag.Message
+</div>
+}
+
