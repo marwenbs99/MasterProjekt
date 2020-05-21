@@ -14,6 +14,12 @@ namespace test5.Models
     
     public partial class Users
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Users()
+        {
+            this.Comments = new HashSet<Comments>();
+        }
+    
         public int UserID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -24,5 +30,8 @@ namespace test5.Models
         public System.Guid ActiovationCode { get; set; }
         public string ResetPasswordCode { get; set; }
         public byte[] Image { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Comments> Comments { get; set; }
     }
 }

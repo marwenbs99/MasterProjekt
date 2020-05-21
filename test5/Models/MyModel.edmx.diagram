@@ -6,6 +6,10 @@
     <edmx:Diagrams>
       <Diagram DiagramId="a9acb0a97d8b4641a86a575a80fbcf0d" Name="Diagram1">
         <EntityTypeShape EntityType="MyDataBaseModel.Users" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MyDataBaseModel.Comments" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="MyDataBaseModel.Replies" Width="1.5" PointX="5.25" PointY="1.375" />
+        <AssociationConnector Association="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" />
+        <AssociationConnector Association="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

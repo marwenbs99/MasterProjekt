@@ -5,6 +5,22 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MyDataBaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Replies">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Text" Type="varchar(max)" Nullable="false" />
+          <Property Name="CommentID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="UserID" />
@@ -20,8 +36,42 @@
           <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
           <Property Name="Image" Type="varbinary(max)" />
         </EntityType>
+        <Association Name="FK__Comments__UserID__57DD0BE4">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Replies__Comment__5BAD9CC8">
+          <End Role="Comments" Type="Self.Comments" Multiplicity="1" />
+          <End Role="Replies" Type="Self.Replies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Replies">
+              <PropertyRef Name="CommentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MyDataBaseModelStoreContainer">
+          <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Replies" EntityType="Self.Replies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Comments__UserID__57DD0BE4" Association="Self.FK__Comments__UserID__57DD0BE4">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Replies__Comment__5BAD9CC8" Association="Self.FK__Replies__Comment__5BAD9CC8">
+            <End Role="Comments" EntitySet="Comments" />
+            <End Role="Replies" EntitySet="Replies" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -41,10 +91,64 @@
           <Property Name="ActiovationCode" Type="Guid" Nullable="false" />
           <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Comments" Relationship="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" FromRole="Users" ToRole="Comments" />
         </EntityType>
         <EntityContainer Name="MyDataBaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.Users" />
+          <EntitySet Name="Comments" EntityType="MyDataBaseModel.Comments" />
+          <EntitySet Name="Replies" EntityType="MyDataBaseModel.Replies" />
+          <AssociationSet Name="FK__Comments__UserID__57DD0BE4" Association="MyDataBaseModel.FK__Comments__UserID__57DD0BE4">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Replies__Comment__5BAD9CC8" Association="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8">
+            <End Role="Comments" EntitySet="Comments" />
+            <End Role="Replies" EntitySet="Replies" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" FromRole="Comments" ToRole="Users" />
+          <NavigationProperty Name="Replies" Relationship="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8" FromRole="Comments" ToRole="Replies" />
+        </EntityType>
+        <EntityType Name="Replies">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CommentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Comments" Relationship="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8" FromRole="Replies" ToRole="Comments" />
+        </EntityType>
+        <Association Name="FK__Comments__UserID__57DD0BE4">
+          <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="MyDataBaseModel.Comments" Role="Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Replies__Comment__5BAD9CC8">
+          <End Type="MyDataBaseModel.Comments" Role="Comments" Multiplicity="1" />
+          <End Type="MyDataBaseModel.Replies" Role="Replies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Comments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Replies">
+              <PropertyRef Name="CommentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -64,6 +168,24 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
                 <ScalarProperty Name="ActiovationCode" ColumnName="ActiovationCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="MyDataBaseModel.Comments">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Replies">
+            <EntityTypeMapping TypeName="MyDataBaseModel.Replies">
+              <MappingFragment StoreEntitySet="Replies">
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

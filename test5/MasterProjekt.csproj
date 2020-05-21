@@ -220,6 +220,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Comments.cs">
+      <DependentUpon>MyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Extended\Users.cs" />
     <Compile Include="Models\MyModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -235,6 +238,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MyModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Replies.cs">
+      <DependentUpon>MyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\UserLogin.cs" />

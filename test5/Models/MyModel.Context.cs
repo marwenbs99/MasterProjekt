@@ -26,5 +26,7 @@ namespace test5.Models
         }
     
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Comments> Comments { get; set; }
+        public virtual DbSet<Replies> Replies { get; set; }
     }
 }
