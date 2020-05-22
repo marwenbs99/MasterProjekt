@@ -18,6 +18,7 @@ namespace test5.Models
         public Users()
         {
             this.Comments = new HashSet<Comments>();
+            this.Replies = new HashSet<Replies>();
         }
     
         public int UserID { get; set; }
@@ -33,5 +34,7 @@ namespace test5.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comments> Comments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Replies> Replies { get; set; }
     }
 }

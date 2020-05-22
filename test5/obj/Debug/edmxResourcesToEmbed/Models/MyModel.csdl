@@ -15,6 +15,7 @@
     <Property Name="ResetPasswordCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
     <NavigationProperty Name="Comments" Relationship="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" FromRole="Users" ToRole="Comments" />
+    <NavigationProperty Name="Replies" Relationship="MyDataBaseModel.FK__Replies__UserID__73852659" FromRole="Users" ToRole="Replies" />
   </EntityType>
   <EntityContainer Name="MyDataBaseEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Users" EntityType="Self.Users" />
@@ -28,16 +29,21 @@
       <End Role="Comments" EntitySet="Comments" />
       <End Role="Replies" EntitySet="Replies" />
     </AssociationSet>
+    <AssociationSet Name="FK__Replies__UserID__73852659" Association="MyDataBaseModel.FK__Replies__UserID__73852659">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Replies" EntitySet="Replies" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Comments">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Text" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="UserID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" FromRole="Comments" ToRole="Users" />
     <NavigationProperty Name="Replies" Relationship="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8" FromRole="Comments" ToRole="Replies" />
+    <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
   </EntityType>
   <EntityType Name="Replies">
     <Key>
@@ -47,6 +53,9 @@
     <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="CommentID" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Comments" Relationship="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8" FromRole="Replies" ToRole="Comments" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Replies__UserID__73852659" FromRole="Replies" ToRole="Users" />
   </EntityType>
   <Association Name="FK__Comments__UserID__57DD0BE4">
     <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
@@ -69,6 +78,18 @@
       </Principal>
       <Dependent Role="Replies">
         <PropertyRef Name="CommentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Replies__UserID__73852659">
+    <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
+    <End Type="MyDataBaseModel.Replies" Role="Replies" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Replies">
+        <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

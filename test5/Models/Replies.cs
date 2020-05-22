@@ -17,7 +17,10 @@ namespace test5.Models
         public int Id { get; set; }
         public string Text { get; set; }
         public int CommentID { get; set; }
+        public int UserID { get; set; }
+        public Nullable<System.DateTime> CreatedOn { get; set; }
     
         public virtual Comments Comments { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

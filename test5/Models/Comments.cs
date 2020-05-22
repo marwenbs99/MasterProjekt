@@ -23,6 +23,7 @@ namespace test5.Models
         public int Id { get; set; }
         public string Text { get; set; }
         public int UserID { get; set; }
+        public System.DateTime CreatedOn { get; set; }
     
         public virtual Users Users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
