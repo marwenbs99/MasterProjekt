@@ -32,9 +32,9 @@
     <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
     <Property Name="ActiovationCode" Type="uniqueidentifier" Nullable="false" />
     <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
-    <Property Name="Image" Type="varbinary(max)" />
+    <Property Name="ImageUrl" Type="varchar(max)" />
   </EntityType>
-  <Association Name="FK__Comments__UserID__625A9A57">
+  <Association Name="FK__Comments__UserID__1C873BEC">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
     <ReferentialConstraint>
@@ -58,7 +58,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Replies__UserID__73852659">
+  <Association Name="FK__Replies__UserID__1B9317B3">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="Replies" Type="Self.Replies" Multiplicity="*" />
     <ReferentialConstraint>
@@ -74,7 +74,7 @@
     <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Replies" EntityType="Self.Replies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Comments__UserID__625A9A57" Association="Self.FK__Comments__UserID__625A9A57">
+    <AssociationSet Name="FK__Comments__UserID__1C873BEC" Association="Self.FK__Comments__UserID__1C873BEC">
       <End Role="Users" EntitySet="Users" />
       <End Role="Comments" EntitySet="Comments" />
     </AssociationSet>
@@ -82,7 +82,7 @@
       <End Role="Comments" EntitySet="Comments" />
       <End Role="Replies" EntitySet="Replies" />
     </AssociationSet>
-    <AssociationSet Name="FK__Replies__UserID__73852659" Association="Self.FK__Replies__UserID__73852659">
+    <AssociationSet Name="FK__Replies__UserID__1B9317B3" Association="Self.FK__Replies__UserID__1B9317B3">
       <End Role="Users" EntitySet="Users" />
       <End Role="Replies" EntitySet="Replies" />
     </AssociationSet>

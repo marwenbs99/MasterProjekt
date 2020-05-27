@@ -24,5 +24,12 @@ namespace test5.Models
         [MinLength(6, ErrorMessage = "Minimum 6 characters required")]
         public string ConfirmPassword { get; set; }
 
+
+
+        
+        public HttpPostedFileWrapper Picture { get; set; }
+
+        public string ImageUrl { get; set; }
+
     }
 }

@@ -4,7 +4,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="MyDataBaseModel.Users">
         <MappingFragment StoreEntitySet="Users">
-          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
           <ScalarProperty Name="ResetPasswordCode" ColumnName="ResetPasswordCode" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />

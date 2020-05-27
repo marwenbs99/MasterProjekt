@@ -10,6 +10,7 @@ namespace test5.Models
     public partial class Users
     {
         public string ConfirmPassword { get; set; }
+        
     }
     public class UserMetadata
     {
@@ -47,5 +48,9 @@ namespace test5.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password required")]
         [MinLength(6, ErrorMessage = "Minimum 6 characters required")]
         public string ConfirmPassword { get; set; }
+
+
+
+        
     }
 }
