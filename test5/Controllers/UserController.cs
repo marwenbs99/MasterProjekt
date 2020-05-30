@@ -442,6 +442,7 @@ namespace test5.Controllers
                     var extentionplusid = v.UserID + extention;
                     String ImgUrl = "~/Profile Image/" + extentionplusid;
                     v.ImageUrl = ImgUrl;
+                   
 
                     //---------------------------------------------
 
@@ -459,6 +460,8 @@ namespace test5.Controllers
                     file.SaveAs(path + extentionplusid);
 
                     message = "Your Picture is update succesfully";
+                    dc.Configuration.ValidateOnSaveEnabled = false;
+                    dc.SaveChanges();
 
                 }
 
