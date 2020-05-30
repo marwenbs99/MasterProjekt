@@ -1,25 +1,40 @@
 ﻿@model test5.Models.UserProfile
 
 @{
-    ViewBag.Title = "Edit Profile";
+    ViewBag.Title = "EditProfile";
 }
 
-<h2>Edit Profile </h2>
+<h2>EditProfile</h2>
+
+
+
+
+
 
 
 @using (Html.BeginForm("EditProfile", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.AntiForgeryToken()
+   @Html.AntiForgeryToken()
+
+    <img src="@Url.Content(Model.ImageUrl)" alt="No Image" style="height:200px" class="img-responsive" />
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="file" name="Picture" class="img-responsive" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Update Picture" name="submit" class="btn btn-default" />
+        </div>
+    </div>
+
+
 
     <div class="form-horizontal">
-        <h4>@ViewBag.that</h4>
-
-        <hr />
-        <div class="text-success">
-            @ViewBag.Message
-
-        </div>
-
+        <h4>User Profile</h4>
+        @ViewBag.Message
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -38,22 +53,24 @@
             </div>
         </div>
 
+
+
+
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" class="btn btn-default" />
+                <input type="submit" value="Update Password" class="btn btn-default" name="submit" />
             </div>
         </div>
     </div>
 }
-@using (Html.BeginForm("Logout", "User", FormMethod.Post, new { id = "LogoutForm" }))
-    {
 
-    }
+
+@using (Html.BeginForm("Logout", "User", FormMethod.Post, new { id = "LogoutForm" }))
+{
+
+}
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

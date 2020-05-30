@@ -12,6 +12,9 @@ using System.Data.SqlClient;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using WebGrease.Css.Ast.Selectors;
+using System.Web.UI.WebControls;
+
 
 namespace test5.Controllers
 {
@@ -32,7 +35,7 @@ namespace test5.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Registration([Bind(Exclude = "IsEmailVerified,ActiovationCode")]Users user)
         {
-            
+
             bool Status = false;
             String message = "";
             if (ModelState.IsValid)
@@ -41,7 +44,7 @@ namespace test5.Controllers
                 var IsExist = IsEmailExist(user.Email);
                 if (IsExist)
                 {
-                    ModelState.AddModelError("Email Exist","Email is already Exist");
+                    ModelState.AddModelError("Email Exist", "Email is already Exist");
                     return View(user);
                 }
                 #endregion
@@ -54,13 +57,13 @@ namespace test5.Controllers
                 #endregion
                 user.IsEmailVerified = false;
                 #region //Save to DataBase
-                
+
                 using (MyDataBaseEntities dc = new MyDataBaseEntities())
                 {
 
                     dc.Users.Add(user);
-                   
-                    
+
+
                     dc.SaveChanges();
                     //send Email to user
                     SendVerificationMail(user.Email, user.ActiovationCode.ToString(), "VerifyAccount");
@@ -82,15 +85,17 @@ namespace test5.Controllers
 
             ViewBag.Message = message;
             ViewBag.Status = Status;
-        
+
             return View(user);
         }
 
         // Verify account
         [HttpGet]
-        public ActionResult VerifyAccount(String ID) {
+        public ActionResult VerifyAccount(String ID)
+        {
             bool Status = false;
-            using (MyDataBaseEntities dc = new MyDataBaseEntities()) {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
 
                 dc.Configuration.ValidateOnSaveEnabled = false; // This line i have added here to avoid confirm password does not match issue on save changes
                 var v = dc.Users.Where(a => a.ActiovationCode == new Guid(ID)).FirstOrDefault();
@@ -101,7 +106,8 @@ namespace test5.Controllers
                     Status = true;
 
                 }
-                else {
+                else
+                {
                     ViewBag.Message = "Invalide request";
                 }
             }
@@ -120,16 +126,17 @@ namespace test5.Controllers
         //Login Post
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(UserLogin login, string ReturnUrl="")
+        public ActionResult Login(UserLogin login, string ReturnUrl = "")
         {
             bool Status = false;
             string message = "";
             ViewBag.Message = message;
-            using (MyDataBaseEntities dc = new MyDataBaseEntities()) {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
                 var v = dc.Users.Where(a => a.Email == login.Email).FirstOrDefault();
-                if (v !=null)
+                if (v != null)
                 {
-                    if (string.Compare(Crypto.Hash(login.password),v.Password) == 0 )
+                    if (string.Compare(Crypto.Hash(login.password), v.Password) == 0)
                     {
                         if (v.IsEmailVerified == true)
                         {
@@ -146,7 +153,7 @@ namespace test5.Controllers
                             cookie1.Expires = DateTime.Now.AddDays(30);
                             cookie1.HttpOnly = true;
                             Response.Cookies.Add(cookie1);
-                          
+
 
 
 
@@ -154,12 +161,12 @@ namespace test5.Controllers
                             {
                                 Status = true;
                                 return Redirect(ReturnUrl);
-                               
+
                             }
                             else
                             {
                                 Status = true;
-                                
+
                                 return RedirectToAction("Index", "Home");
                             }
                         }
@@ -167,7 +174,7 @@ namespace test5.Controllers
                         {
                             message = "Email most be verified firsrt";
                         }
-                       
+
                     }
                     else
                     {
@@ -192,16 +199,16 @@ namespace test5.Controllers
         {
 
             FormsAuthentication.SignOut();
-           
+
             return RedirectToAction("Login", "User");
 
-          
+
         }
 
         [NonAction]
         public bool IsEmailExist(String Email)
-        { 
-            using (MyDataBaseEntities dc = new MyDataBaseEntities() )
+        {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
             {
                 var v = dc.Users.Where(a => a.Email == Email).FirstOrDefault();
                 return v != null;
@@ -212,7 +219,7 @@ namespace test5.Controllers
         [NonAction]
         public void SendVerificationMail(String mail, string ActivationCode, string emailfor)
         {
-            var VerifyUrl = "/User/"+emailfor+"/" + ActivationCode;
+            var VerifyUrl = "/User/" + emailfor + "/" + ActivationCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, VerifyUrl);
             var fromEmail = new MailAddress("coboye1992@hotmail.fr", "Master Projekt");
             var toEmail = new MailAddress(mail);
@@ -222,15 +229,15 @@ namespace test5.Controllers
 
             if (emailfor == "VerifyAccount")
             {
-                 subject = "Your account is successfully created!";
-                 body = "<br/><br/> We are excited to tell you that your account is" + "successfully created. Please click on the below link to verify your account" + "<br/><br/> <a href='" + link + "'>" + link + "</a>";
+                subject = "Your account is successfully created!";
+                body = "<br/><br/> We are excited to tell you that your account is" + "successfully created. Please click on the below link to verify your account" + "<br/><br/> <a href='" + link + "'>" + link + "</a>";
             }
-            else if(emailfor == "ResetPassword")
+            else if (emailfor == "ResetPassword")
             {
                 subject = "Password Reset";
-                body = "Hi,<br/><br/>We got request for reset your account-password. Please click on the below link to reset your password "+ "<br/><br/><a href=" + link + "> Reset Password link </a>";
+                body = "Hi,<br/><br/>We got request for reset your account-password. Please click on the below link to reset your password " + "<br/><br/><a href=" + link + "> Reset Password link </a>";
             }
-           
+
             var smtp = new SmtpClient
             {
                 Host = "smtp.live.com",
@@ -268,15 +275,15 @@ namespace test5.Controllers
             //generate reset password link
             //send Email
             string message = "";
-            bool Status = false;
-            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
             {
                 var account = dc.Users.Where(a => a.Email == email).FirstOrDefault();
-                if(account != null)
+                if (account != null)
                 {
                     //send Email for reset password
                     string ResetCode = Guid.NewGuid().ToString();
-                    SendVerificationMail(account.Email, ResetCode,"ResetPassword");
+                    SendVerificationMail(account.Email, ResetCode, "ResetPassword");
                     account.ResetPasswordCode = ResetCode;
                     //This line i have added here to avoid confirm password not mutch issue, as we have added a confirm password proprerty
                     dc.Configuration.ValidateOnSaveEnabled = false;
@@ -294,11 +301,11 @@ namespace test5.Controllers
         }
 
 
-        
+
         public ActionResult ResetPassword(string ID)
         {
-           
-                using (MyDataBaseEntities dc = new MyDataBaseEntities())
+
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
             {
                 var v = dc.Users.Where(a => a.ResetPasswordCode == ID).FirstOrDefault();
                 if (v != null)
@@ -314,8 +321,8 @@ namespace test5.Controllers
 
             }
 
-            
-    }
+
+        }
 
 
 
@@ -324,7 +331,8 @@ namespace test5.Controllers
         public ActionResult ResetPassword(ResetPasswordModel model)
         {
             var message = "";
-            if(model.NewPassword.Length >= 6 && model.NewPassword == model.ConfirmPassword) {
+            if (model.NewPassword.Length >= 6 && model.NewPassword == model.ConfirmPassword)
+            {
 
 
                 if (ModelState.IsValid)
@@ -352,23 +360,30 @@ namespace test5.Controllers
 
 
             }
-            
-           
+
+
 
             ViewBag.Message = message;
-          
-           return View(model);
+
+            return View(model);
         }
         [Authorize]
         [HttpGet]
         public ActionResult EditProfile()
         {
+            UserProfile up = new UserProfile();
             string mail = "";
             mail = Request.Cookies["Mycookie"].Value;
-            using(MyDataBaseEntities dc = new MyDataBaseEntities())
-           {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
                 var v = dc.Users.Where(a => a.Email == mail).FirstOrDefault();
-              ViewBag.that = v.FirstName +" "+ v.LastName;
+                ViewBag.that = v.FirstName + " " + v.LastName;
+               
+                if (v.ImageUrl != "")
+                {
+                    up.ImageUrl = v.ImageUrl;
+                    return View(up);
+                }
 
             }
 
@@ -376,22 +391,28 @@ namespace test5.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult EditProfile(UserProfile up)
+        public ActionResult EditProfile(UserProfile up,string submit)
         {
 
+            if(submit == "Update Password")
+            { 
             string message = "";
             string email = Request.Cookies["Mycookie"].Value;
             if (ModelState.IsValid)
             {
-                using(MyDataBaseEntities dc = new MyDataBaseEntities()) { 
-                var v = dc.Users.Where(a => a.Email == email).FirstOrDefault();
+                
+
+                
+
+
+                using (MyDataBaseEntities dc = new MyDataBaseEntities())
+                {
+                    var v = dc.Users.Where(a => a.Email == email).FirstOrDefault();
                     ViewBag.that = v.FirstName + " " + v.LastName;
                     v.Password = Crypto.Hash(up.password);
                     dc.Configuration.ValidateOnSaveEnabled = false;
                     dc.SaveChanges();
                     message = "New Password update succesfully";
-
-
                 }
 
             }
@@ -399,14 +420,69 @@ namespace test5.Controllers
             {
                 message = "Something invalide";
             }
+                ViewBag.Message = message;
+                return RedirectToAction("EditProfile", "User");
+            }
+            else if (submit == "Update Picture")
+            {
 
-            ViewBag.Message = message;
-                return View();
+
+                string message = "";
+                string email = Request.Cookies["Mycookie"].Value;
+
+                using (MyDataBaseEntities dc = new MyDataBaseEntities())
+                {
+                    var v = dc.Users.Where(a => a.Email == email).FirstOrDefault();
+                    ViewBag.that = v.FirstName + " " + v.LastName;
+
+
+                    //---------------------------------------------
+                    var file = up.Picture;
+                    var extention = Path.GetExtension(file.FileName);
+                    var extentionplusid = v.UserID + extention;
+                    String ImgUrl = "~/Profile Image/" + extentionplusid;
+                    v.ImageUrl = ImgUrl;
+                   
+
+                    //---------------------------------------------
+
+
+
+                    var path = Server.MapPath("~/Profile Image/");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    if (System.IO.File.Exists(path + extentionplusid))
+                    {
+                        System.IO.File.Delete(path + extentionplusid);
+                    }
+                    file.SaveAs(path + extentionplusid);
+
+                    message = "Your Picture is update succesfully";
+                    dc.Configuration.ValidateOnSaveEnabled = false;
+                    dc.SaveChanges();
+
+                }
+
+                ViewBag.Message = message;
+
+                return RedirectToAction("EditProfile", "User");
+
+            }
+           
+
+            return View();
+
+
         }
+
+
+     
+
 
 
 
 
     }
-    
 }

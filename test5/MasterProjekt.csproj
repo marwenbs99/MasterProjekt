@@ -214,11 +214,15 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ChatRoomController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Comments.cs">
+      <DependentUpon>MyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\Users.cs" />
     <Compile Include="Models\MyModel.Context.cs">
@@ -236,6 +240,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MyModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Replies.cs">
+      <DependentUpon>MyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ReplyVM.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\UserLogin.cs" />
     <Compile Include="Models\UserProfile.cs" />
@@ -304,7 +312,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\User\Forgotpassword.cshtml" />
     <Content Include="Views\User\ResetPassword.cshtml" />
+    <Content Include="Views\ChatRoom\UserComment.cshtml" />
     <Content Include="Views\User\EditProfile.cshtml" />
+    <Content Include="Views\User\EditPicture.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
