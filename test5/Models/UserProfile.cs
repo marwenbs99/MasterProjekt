@@ -8,6 +8,11 @@ namespace test5.Models
 {
     public class UserProfile
     {
+        [Display(Name = "Old password")]
+        [DataType(DataType.Password)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Old password required")]
+        [MinLength(6, ErrorMessage = "Minimum 6 characters required")]
+        public string OldPassword { get; set; }
 
         [Display(Name = "New Password")]
         [DataType(DataType.Password)]
