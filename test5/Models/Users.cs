@@ -26,6 +26,10 @@ public partial class Users
 
         this.Replies = new HashSet<Replies>();
 
+        this.Projects = new HashSet<Projects>();
+
+        this.Memebre = new HashSet<Memebre>();
+
     }
 
 
@@ -58,6 +62,14 @@ public partial class Users
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 
     public virtual ICollection<Replies> Replies { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Projects> Projects { get; set; }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+
+    public virtual ICollection<Memebre> Memebre { get; set; }
 
 }
 

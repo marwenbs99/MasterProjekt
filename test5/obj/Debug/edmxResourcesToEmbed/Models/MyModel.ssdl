@@ -9,6 +9,36 @@
     <Property Name="UserID" Type="int" Nullable="false" />
     <Property Name="CreatedOn" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="Events">
+    <Key>
+      <PropertyRef Name="EventId" />
+    </Key>
+    <Property Name="EventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Subject" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="Description" Type="nchar" MaxLength="300" />
+    <Property Name="Start" Type="datetime" Nullable="false" />
+    <Property Name="End" Type="datetime" />
+    <Property Name="ThemeColor" Type="nchar" MaxLength="10" />
+    <Property Name="IsFullDay" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Memebre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="ProjectID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Projects">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar(max)" />
+    <Property Name="Description" Type="varchar(max)" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="Statut" Type="varchar(max)" />
+  </EntityType>
   <EntityType Name="Replies">
     <Key>
       <PropertyRef Name="Id" />
@@ -34,7 +64,7 @@
     <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
     <Property Name="ImageUrl" Type="varchar(max)" />
   </EntityType>
-  <Association Name="FK__Comments__UserID__1C873BEC">
+  <Association Name="FK__Comments__UserID__25869641">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
     <ReferentialConstraint>
@@ -46,7 +76,31 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Replies__Comment__634EBE90">
+  <Association Name="FK__Memebre__Project__3E52440B">
+    <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+    <End Role="Memebre" Type="Self.Memebre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Projects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Memebre">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Memebre__UserID__3D5E1FD2">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Memebre" Type="Self.Memebre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Memebre">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Replies__Comment__286302EC">
     <End Role="Comments" Type="Self.Comments" Multiplicity="1" />
     <End Role="Replies" Type="Self.Replies" Multiplicity="*" />
     <ReferentialConstraint>
@@ -58,7 +112,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Replies__UserID__1B9317B3">
+  <Association Name="FK__Replies__UserID__29572725">
     <End Role="Users" Type="Self.Users" Multiplicity="1" />
     <End Role="Replies" Type="Self.Replies" Multiplicity="*" />
     <ReferentialConstraint>
@@ -70,21 +124,48 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK__Table__UserID__3A81B327">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Projects">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="MyDataBaseModelStoreContainer">
     <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Memebre" EntityType="Self.Memebre" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Replies" EntityType="Self.Replies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-    <AssociationSet Name="FK__Comments__UserID__1C873BEC" Association="Self.FK__Comments__UserID__1C873BEC">
+    <AssociationSet Name="FK__Comments__UserID__25869641" Association="Self.FK__Comments__UserID__25869641">
       <End Role="Users" EntitySet="Users" />
       <End Role="Comments" EntitySet="Comments" />
     </AssociationSet>
-    <AssociationSet Name="FK__Replies__Comment__634EBE90" Association="Self.FK__Replies__Comment__634EBE90">
+    <AssociationSet Name="FK__Memebre__Project__3E52440B" Association="Self.FK__Memebre__Project__3E52440B">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="Memebre" EntitySet="Memebre" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Memebre__UserID__3D5E1FD2" Association="Self.FK__Memebre__UserID__3D5E1FD2">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Memebre" EntitySet="Memebre" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Replies__Comment__286302EC" Association="Self.FK__Replies__Comment__286302EC">
       <End Role="Comments" EntitySet="Comments" />
       <End Role="Replies" EntitySet="Replies" />
     </AssociationSet>
-    <AssociationSet Name="FK__Replies__UserID__1B9317B3" Association="Self.FK__Replies__UserID__1B9317B3">
+    <AssociationSet Name="FK__Replies__UserID__29572725" Association="Self.FK__Replies__UserID__29572725">
       <End Role="Users" EntitySet="Users" />
       <End Role="Replies" EntitySet="Replies" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Table__UserID__3A81B327" Association="Self.FK__Table__UserID__3A81B327">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Projects" EntitySet="Projects" />
     </AssociationSet>
   </EntityContainer>
 </Schema>
