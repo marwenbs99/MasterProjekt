@@ -39,6 +39,22 @@ namespace test5.Controllers
                         lista.Add(pw);
 
                     }
+                    var o = dc.Memebre.Where(k => k.UserID == v.UserID).ToList();
+                    if (o.Count > 0)
+                    {
+                        for (int i = 0; i < o.Count; i++)
+                        {
+                            Projectsview pw = new Projectsview();
+                            pw.ManagerName = ProjektManagerName(o[i].ProjectID);
+                            pw.Name = Projektdetaille(o[i].ProjectID).Name;
+                            pw.Description = Projektdetaille(o[i].ProjectID).Description;
+                            pw.IfManager = false;
+                            pw.Statut = Projektdetaille(o[i].ProjectID).Statut;
+                            pw.ID = o[i].ProjectID;
+                            lista.Add(pw);
+
+                        }
+                    }
                 }
                
                 
@@ -132,7 +148,28 @@ namespace test5.Controllers
             }
         }
 
+        [NonAction]
+        public String ProjektManagerName(int projektID)
+        {
+            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var v = dc.Projects.Where(a => a.Id == projektID).FirstOrDefault();
+                var u = dc.Users.Where(b => b.UserID == v.UserID).FirstOrDefault();
+                return u.FirstName + " " + u.LastName;
+            }
+            
+        }
+        [NonAction]
+        public Projects Projektdetaille(int projektID)
+        {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var v = dc.Projects.Where(a => a.Id == projektID).FirstOrDefault();
+                
+                return v;
+            }
 
+        }
 
 
 

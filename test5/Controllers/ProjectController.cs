@@ -61,9 +61,65 @@ namespace test5.Controllers
             return View();
         }
 
-        public ActionResult AddPartner(int ID )
+        [HttpGet]
+        public ActionResult AddPartner(int id)
         {
-            return View();
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var v = dc.Users.Select(a => a.Email).ToList();
+                var lista = new List<String>();
+                lista = v;
+               
+                ViewBag.Statut = new SelectList(lista);
+                MembreElem m = new MembreElem();
+                m.projektID = id;
+                ViewBag.Log = Emailliste(id);
+
+
+
+                return View(m);
+            }
+
+        }
+
+        [HttpPost]
+        public ActionResult AddPartner(MembreElem e)
+        {
+            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                Memebre m = new Memebre();
+                m.UserID = dc.Users.Where(a => a.Email == e.email).FirstOrDefault().UserID;
+                m.ProjectID = e.projektID;
+                dc.Memebre.Add(m);
+                dc.Configuration.ValidateOnSaveEnabled = false;
+                dc.SaveChanges();
+
+            }
+
+            return RedirectToAction("AddPartner", "Project", e.projektID );
+        }
+        [NonAction]
+        public List<string>  Emailliste(int projektID)
+        {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var j = dc.Memebre.Where(a => a.ProjectID == projektID).ToList();
+                List<string> t = new List<string>();
+                t.Add("Users added in the Project : " + dc.Projects.Where(z => z.Id == projektID).FirstOrDefault().Name + "\n --------------------------------------------------------------- \n");
+                if(j.Count > 0)
+                {
+                    for (int i = 0; i < j.Count; i++)
+                    {
+                        int u = new int();
+                        u = j[i].UserID;
+                        var s = dc.Users.Where(w => w.UserID == u).FirstOrDefault().Email;
+                        t.Add(s + "\n --------------------------------------------------------------- \n");
+                    }
+                }
+                
+                return t;
+            }
+
         }
 
     }

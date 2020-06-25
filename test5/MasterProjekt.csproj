@@ -293,6 +293,7 @@
       <DependentUpon>MyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\Users.cs" />
+    <Compile Include="Models\MembreElem.cs" />
     <Compile Include="Models\Memebre.cs">
       <DependentUpon>MyModel.tt</DependentUpon>
     </Compile>
