@@ -38,6 +38,12 @@ public partial class MyDataBaseEntities : DbContext
 
     public virtual DbSet<Replies> Replies { get; set; }
 
+    public virtual DbSet<Events> Events { get; set; }
+
+    public virtual DbSet<Projects> Projects { get; set; }
+
+    public virtual DbSet<Memebre> Memebre { get; set; }
+
 }
 
 }

@@ -14,6 +14,36 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Events">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Subject" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="300" />
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="End" Type="datetime" />
+          <Property Name="ThemeColor" Type="nchar" MaxLength="10" />
+          <Property Name="IsFullDay" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Memebre">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ProjectID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar(max)" />
+          <Property Name="Description" Type="varchar(max)" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Statut" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="Replies">
           <Key>
             <PropertyRef Name="Id" />
@@ -39,7 +69,7 @@
           <Property Name="ResetPasswordCode" Type="nvarchar" MaxLength="100" />
           <Property Name="ImageUrl" Type="varchar(max)" />
         </EntityType>
-        <Association Name="FK__Comments__UserID__1C873BEC">
+        <Association Name="FK__Comments__UserID__25869641">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
           <ReferentialConstraint>
@@ -51,7 +81,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Replies__Comment__634EBE90">
+        <Association Name="FK__Memebre__Project__3E52440B">
+          <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+          <End Role="Memebre" Type="Self.Memebre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Memebre">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Memebre__UserID__3D5E1FD2">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Memebre" Type="Self.Memebre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Memebre">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Replies__Comment__286302EC">
           <End Role="Comments" Type="Self.Comments" Multiplicity="1" />
           <End Role="Replies" Type="Self.Replies" Multiplicity="*" />
           <ReferentialConstraint>
@@ -63,7 +117,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Replies__UserID__1B9317B3">
+        <Association Name="FK__Replies__UserID__29572725">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Replies" Type="Self.Replies" Multiplicity="*" />
           <ReferentialConstraint>
@@ -75,21 +129,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Table__UserID__3A81B327">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Projects">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MyDataBaseModelStoreContainer">
           <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Memebre" EntityType="Self.Memebre" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Replies" EntityType="Self.Replies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Comments__UserID__1C873BEC" Association="Self.FK__Comments__UserID__1C873BEC">
+          <AssociationSet Name="FK__Comments__UserID__25869641" Association="Self.FK__Comments__UserID__25869641">
             <End Role="Users" EntitySet="Users" />
             <End Role="Comments" EntitySet="Comments" />
           </AssociationSet>
-          <AssociationSet Name="FK__Replies__Comment__634EBE90" Association="Self.FK__Replies__Comment__634EBE90">
+          <AssociationSet Name="FK__Memebre__Project__3E52440B" Association="Self.FK__Memebre__Project__3E52440B">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Memebre" EntitySet="Memebre" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Memebre__UserID__3D5E1FD2" Association="Self.FK__Memebre__UserID__3D5E1FD2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Memebre" EntitySet="Memebre" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Replies__Comment__286302EC" Association="Self.FK__Replies__Comment__286302EC">
             <End Role="Comments" EntitySet="Comments" />
             <End Role="Replies" EntitySet="Replies" />
           </AssociationSet>
-          <AssociationSet Name="FK__Replies__UserID__1B9317B3" Association="Self.FK__Replies__UserID__1B9317B3">
+          <AssociationSet Name="FK__Replies__UserID__29572725" Association="Self.FK__Replies__UserID__29572725">
             <End Role="Users" EntitySet="Users" />
             <End Role="Replies" EntitySet="Replies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Table__UserID__3A81B327" Association="Self.FK__Table__UserID__3A81B327">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Projects" EntitySet="Projects" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -112,6 +193,8 @@
           <NavigationProperty Name="Comments" Relationship="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" FromRole="Users" ToRole="Comments" />
           <NavigationProperty Name="Replies" Relationship="MyDataBaseModel.FK__Replies__UserID__73852659" FromRole="Users" ToRole="Replies" />
           <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Projects" Relationship="MyDataBaseModel.FK__Table__UserID__3A81B3271" FromRole="Users" ToRole="Projects" />
+          <NavigationProperty Name="Memebre" Relationship="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2" FromRole="Users" ToRole="Memebre" />
         </EntityType>
         <EntityContainer Name="MyDataBaseEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.Users" />
@@ -128,6 +211,21 @@
           <AssociationSet Name="FK__Replies__UserID__73852659" Association="MyDataBaseModel.FK__Replies__UserID__73852659">
             <End Role="Users" EntitySet="Users" />
             <End Role="Replies" EntitySet="Replies" />
+          </AssociationSet>
+          <EntitySet Name="Events" EntityType="MyDataBaseModel.Events" />
+          <EntitySet Name="Projects" EntityType="MyDataBaseModel.Projects" />
+          <AssociationSet Name="FK__Table__UserID__3A81B3271" Association="MyDataBaseModel.FK__Table__UserID__3A81B3271">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Projects" EntitySet="Projects" />
+          </AssociationSet>
+          <EntitySet Name="Memebre" EntityType="MyDataBaseModel.Memebre" />
+          <AssociationSet Name="FK__Memebre__Project__3E52440B" Association="MyDataBaseModel.FK__Memebre__Project__3E52440B">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Memebre" EntitySet="Memebre" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Memebre__UserID__3D5E1FD2" Association="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Memebre" EntitySet="Memebre" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Comments">
@@ -189,6 +287,76 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Events">
+          <Key>
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Subject" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="true" Unicode="true" />
+          <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="End" Type="DateTime" Precision="3" />
+          <Property Name="ThemeColor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="IsFullDay" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Table__UserID__3A81B3271" FromRole="Projects" ToRole="Users" />
+          <Property Name="Statut" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Memebre" Relationship="MyDataBaseModel.FK__Memebre__Project__3E52440B" FromRole="Projects" ToRole="Memebre" />
+        </EntityType>
+        <Association Name="FK__Table__UserID__3A81B3271">
+          <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="MyDataBaseModel.Projects" Role="Projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Projects">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Memebre">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ProjectID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Projects" Relationship="MyDataBaseModel.FK__Memebre__Project__3E52440B" FromRole="Memebre" ToRole="Projects" />
+          <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2" FromRole="Memebre" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK__Memebre__Project__3E52440B">
+          <End Type="MyDataBaseModel.Projects" Role="Projects" Multiplicity="1" />
+          <End Type="MyDataBaseModel.Memebre" Role="Memebre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Memebre">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Memebre__UserID__3D5E1FD2">
+          <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="MyDataBaseModel.Memebre" Role="Memebre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Memebre">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -228,6 +396,39 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="CommentID" ColumnName="CommentID" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Events">
+            <EntityTypeMapping TypeName="MyDataBaseModel.Events">
+              <MappingFragment StoreEntitySet="Events">
+                <ScalarProperty Name="IsFullDay" ColumnName="IsFullDay" />
+                <ScalarProperty Name="ThemeColor" ColumnName="ThemeColor" />
+                <ScalarProperty Name="End" ColumnName="End" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="MyDataBaseModel.Projects">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="Statut" ColumnName="Statut" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Memebre">
+            <EntityTypeMapping TypeName="MyDataBaseModel.Memebre">
+              <MappingFragment StoreEntitySet="Memebre">
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

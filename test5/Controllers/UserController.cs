@@ -14,7 +14,8 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using WebGrease.Css.Ast.Selectors;
 using System.Web.UI.WebControls;
-
+using Microsoft.Extensions.Caching.Memory;
+using System.Web.Routing;
 
 namespace test5.Controllers
 {
@@ -371,6 +372,10 @@ namespace test5.Controllers
         [HttpGet]
         public ActionResult EditProfile()
         {
+
+
+
+
             UserProfile up = new UserProfile();
             string mail = "";
             mail = Request.Cookies["Mycookie"].Value;
@@ -378,9 +383,10 @@ namespace test5.Controllers
             {
                 var v = dc.Users.Where(a => a.Email == mail).FirstOrDefault();
                 ViewBag.that = v.FirstName + " " + v.LastName;
-               
+
                 if (v.ImageUrl != "")
                 {
+
                     up.ImageUrl = v.ImageUrl;
                     return View(up);
                 }
@@ -391,37 +397,55 @@ namespace test5.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult EditProfile(UserProfile up,string submit)
+        public ActionResult EditProfile(UserProfile up, string submit)
         {
 
-            if(submit == "Update Password")
-            { 
-            string message = "";
-            string email = Request.Cookies["Mycookie"].Value;
-            if (ModelState.IsValid)
+            if (submit == "Update Password")
             {
-                
 
-                
-
-
+                string email = Request.Cookies["Mycookie"].Value;
                 using (MyDataBaseEntities dc = new MyDataBaseEntities())
                 {
                     var v = dc.Users.Where(a => a.Email == email).FirstOrDefault();
-                    ViewBag.that = v.FirstName + " " + v.LastName;
-                    v.Password = Crypto.Hash(up.password);
-                    dc.Configuration.ValidateOnSaveEnabled = false;
-                    dc.SaveChanges();
-                    message = "New Password update succesfully";
+                    if (ModelState.IsValid)
+                    {
+
+
+
+
+                        String oldpassword = Crypto.Hash(up.OldPassword);
+                        if (oldpassword == v.Password)
+                        {
+                            v.Password = Crypto.Hash(up.password);
+                            dc.Configuration.ValidateOnSaveEnabled = false;
+                            dc.SaveChanges();
+                            ViewBag.Message = "New Password update succesfully";
+                            up.ImageUrl = v.ImageUrl;
+                            return View(up);
+
+                        }
+                        else
+                        {
+                            ViewBag.Message = "Old password is wrong!";
+                            up.ImageUrl = v.ImageUrl;
+                            return View(up);
+                        }
+
+
+
+
+
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Something invalide";
+                        up.ImageUrl = v.ImageUrl;
+                        return View(up);
+
+                    }
                 }
 
-            }
-            else
-            {
-                message = "Something invalide";
-            }
-                ViewBag.Message = message;
-                return RedirectToAction("EditProfile", "User");
+
             }
             else if (submit == "Update Picture")
             {
@@ -442,7 +466,8 @@ namespace test5.Controllers
                     var extentionplusid = v.UserID + extention;
                     String ImgUrl = "~/Profile Image/" + extentionplusid;
                     v.ImageUrl = ImgUrl;
-                   
+                    dc.Configuration.ValidateOnSaveEnabled = false;
+                    dc.SaveChanges();
 
                     //---------------------------------------------
 
@@ -458,27 +483,25 @@ namespace test5.Controllers
                         System.IO.File.Delete(path + extentionplusid);
                     }
                     file.SaveAs(path + extentionplusid);
+                    ViewBag.Message = "Your Picture is update succesfully";
 
-                    message = "Your Picture is update succesfully";
-                    dc.Configuration.ValidateOnSaveEnabled = false;
-                    dc.SaveChanges();
 
                 }
 
-                ViewBag.Message = message;
 
+                
                 return RedirectToAction("EditProfile", "User");
 
             }
-           
 
-            return View();
+            return View(up);
+            //return RedirectToAction("EditProfile", "User");
 
 
         }
 
 
-     
+
 
 
 

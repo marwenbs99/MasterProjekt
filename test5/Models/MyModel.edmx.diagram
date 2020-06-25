@@ -11,6 +11,12 @@
         <AssociationConnector Association="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" />
         <AssociationConnector Association="MyDataBaseModel.FK__Replies__Comment__5BAD9CC8" />
         <AssociationConnector Association="MyDataBaseModel.FK__Replies__UserID__73852659" />
+        <EntityTypeShape EntityType="MyDataBaseModel.Events" Width="1.5" PointX="2.375" PointY="2.25" />
+        <EntityTypeShape EntityType="MyDataBaseModel.Projects" Width="1.5" PointX="11.5" PointY="4.375" />
+        <AssociationConnector Association="MyDataBaseModel.FK__Table__UserID__3A81B3271" />
+        <EntityTypeShape EntityType="MyDataBaseModel.Memebre" Width="1.5" PointX="11.75" PointY="0.75" />
+        <AssociationConnector Association="MyDataBaseModel.FK__Memebre__Project__3E52440B" />
+        <AssociationConnector Association="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

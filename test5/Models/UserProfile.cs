@@ -25,8 +25,14 @@ namespace test5.Models
         public string ConfirmPassword { get; set; }
 
 
+        [Display(Name = "Old Password")]
+        [DataType(DataType.Password)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Old Password required")]
+        [MinLength(6, ErrorMessage = "Minimum 6 characters required")]
 
-        
+        public string OldPassword { get; set; }
+
+
         public HttpPostedFileWrapper Picture { get; set; }
 
         public string ImageUrl { get; set; }

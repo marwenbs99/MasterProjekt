@@ -16,6 +16,8 @@
     <NavigationProperty Name="Comments" Relationship="MyDataBaseModel.FK__Comments__UserID__57DD0BE4" FromRole="Users" ToRole="Comments" />
     <NavigationProperty Name="Replies" Relationship="MyDataBaseModel.FK__Replies__UserID__73852659" FromRole="Users" ToRole="Replies" />
     <Property Name="ImageUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Projects" Relationship="MyDataBaseModel.FK__Table__UserID__3A81B3271" FromRole="Users" ToRole="Projects" />
+    <NavigationProperty Name="Memebre" Relationship="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2" FromRole="Users" ToRole="Memebre" />
   </EntityType>
   <EntityContainer Name="MyDataBaseEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Users" EntityType="Self.Users" />
@@ -32,6 +34,21 @@
     <AssociationSet Name="FK__Replies__UserID__73852659" Association="MyDataBaseModel.FK__Replies__UserID__73852659">
       <End Role="Users" EntitySet="Users" />
       <End Role="Replies" EntitySet="Replies" />
+    </AssociationSet>
+    <EntitySet Name="Events" EntityType="MyDataBaseModel.Events" />
+    <EntitySet Name="Projects" EntityType="MyDataBaseModel.Projects" />
+    <AssociationSet Name="FK__Table__UserID__3A81B3271" Association="MyDataBaseModel.FK__Table__UserID__3A81B3271">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Projects" EntitySet="Projects" />
+    </AssociationSet>
+    <EntitySet Name="Memebre" EntityType="MyDataBaseModel.Memebre" />
+    <AssociationSet Name="FK__Memebre__Project__3E52440B" Association="MyDataBaseModel.FK__Memebre__Project__3E52440B">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="Memebre" EntitySet="Memebre" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Memebre__UserID__3D5E1FD2" Association="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Memebre" EntitySet="Memebre" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Comments">
@@ -89,6 +106,76 @@
         <PropertyRef Name="UserID" />
       </Principal>
       <Dependent Role="Replies">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Events">
+    <Key>
+      <PropertyRef Name="EventId" />
+    </Key>
+    <Property Name="EventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Subject" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="300" FixedLength="true" Unicode="true" />
+    <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="End" Type="DateTime" Precision="3" />
+    <Property Name="ThemeColor" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="IsFullDay" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Projects">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Table__UserID__3A81B3271" FromRole="Projects" ToRole="Users" />
+    <Property Name="Statut" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Memebre" Relationship="MyDataBaseModel.FK__Memebre__Project__3E52440B" FromRole="Projects" ToRole="Memebre" />
+  </EntityType>
+  <Association Name="FK__Table__UserID__3A81B3271">
+    <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
+    <End Type="MyDataBaseModel.Projects" Role="Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Projects">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Memebre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="ProjectID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Projects" Relationship="MyDataBaseModel.FK__Memebre__Project__3E52440B" FromRole="Memebre" ToRole="Projects" />
+    <NavigationProperty Name="Users" Relationship="MyDataBaseModel.FK__Memebre__UserID__3D5E1FD2" FromRole="Memebre" ToRole="Users" />
+  </EntityType>
+  <Association Name="FK__Memebre__Project__3E52440B">
+    <End Type="MyDataBaseModel.Projects" Role="Projects" Multiplicity="1" />
+    <End Type="MyDataBaseModel.Memebre" Role="Memebre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Projects">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Memebre">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Memebre__UserID__3D5E1FD2">
+    <End Type="MyDataBaseModel.Users" Role="Users" Multiplicity="1" />
+    <End Type="MyDataBaseModel.Memebre" Role="Memebre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Memebre">
         <PropertyRef Name="UserID" />
       </Dependent>
     </ReferentialConstraint>

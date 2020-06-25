@@ -1,17 +1,59 @@
-﻿
+﻿@model IEnumerable<test5.Models.Projectsview>
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-Welcome @HttpContext.Current.User.Identity.Name
+<h2>Accueil</h2>
+<h1 style="display: block;margin : auto;">Welcome back    @Html.ActionLink(User.Identity.Name, "EditProfile", "User")</h1>
+
+@*@HttpContext.Current.User.Identity.Name*@
+
+<hr />
 
 
+<div class="col-md-12 text-center">
+    <a href="@Url.Action("Create", "Project")" class="btn btn-info    btn-lg active" role="button" aria-pressed="true" style="width:400px;display: block;margin : auto;">create project</a>
 
 
-<h1>    @ViewBag.Message </h1>
+</div>
 
+<hr />
 
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>project Manager</th>
+            <th style="text-align:center;">functions</th>
+            <th>Statut</th>
+
+        </tr>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td >@item.Name</td>
+        <td>@item.Description</td>
+        <td>@item.ManagerName</td>
+
+        <td style="text-align:center;">
+            @if (item.IfManager == true)
+            {
+                <button type="button" class="btn btn-outline-dark">@Html.ActionLink("Edit project", "EditProject", "Home", new { ID = item.ID }, null) </button>
+                <button type="button" class="btn btn-outline-dark">@Html.ActionLink("Add Partner", "EditProject", "Home", new { ID = item.ID }, null) </button>
+            }
+            <button type="button" class="btn btn-info">@Html.ActionLink("Show", "Projectdetails", "Project", new { ID = item.ID }, null)</button>
+
+        </td>
+        <td>@item.Statut</td>
+
+            
+    </tr>
+        }
+    </table>
+</div>
+
+<hr />
 
 @if (Request.IsAuthenticated)
 {
@@ -20,4 +62,3 @@ Welcome @HttpContext.Current.User.Identity.Name
         <a href="javascript:document.getElementById('LogoutForm').submit()">Logout</a>
     }
 }
-
