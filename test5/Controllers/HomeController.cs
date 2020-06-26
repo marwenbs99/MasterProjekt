@@ -132,6 +132,29 @@ namespace test5.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                return View (dc.Projects.Where(a => a.Id == id).FirstOrDefault());
+
+            }
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public ActionResult DeleteConfirm(int id)
+        {
+            using (MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var v = dc.Projects.Where(a => a.Id == id).FirstOrDefault();
+                dc.Projects.Remove(v);
+                dc.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
 
 
 
