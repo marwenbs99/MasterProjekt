@@ -4,10 +4,15 @@
         background: url('http://subtlepatterns.com/patterns/geometry2.png');
     }
 </style>
-<h2>ChatBox</h2>
+@*<input type="submit" value="Calendar" class="btn btn-info" href="@Url.Action("Index", "Home")" style="width: 230px;  margin-left: auto;" />*@
+<a class="btn btn-info" href="@Url.Action("MyCalendar", "Home")" style="width: 230px;  margin-left: auto;">Calendar</a> <br />
+<a class="btn btn-info" href="@Url.Action("Testvideo", "Project")" style="width: 230px;  margin-left: auto;">Join the video Conference</a>
+<br /><br /><br />
+<h2 style="margin-left: auto;
+    margin-right: auto;">ChatRoom unsing SingalR</h2>
 <div class="chat-panel panel panel-default">
     <div class="panel-heading">
-        ChatBox using SingalR
+       
         <i class="fa fa-paper-plane fa-fw"></i>
     </div>
     <!-- /.panel-heading -->
@@ -28,6 +33,11 @@
         </div>
     </div>
 </div>
+<h2 style="margin-left: auto;
+    margin-right: auto;">
+    list of operations
+</h2>
+
 @section scripts {
     <!--Script references. -->
     <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->

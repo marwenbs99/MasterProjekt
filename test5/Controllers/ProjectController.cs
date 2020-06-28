@@ -58,7 +58,7 @@ namespace test5.Controllers
                 ViewBag.name = v.FirstName;
                 ViewBag.img = v.ImageUrl;
             }
-            return View();
+            return View(ID);
         }
 
         [HttpGet]
@@ -120,6 +120,21 @@ namespace test5.Controllers
                 return t;
             }
 
+        }
+
+        [HttpGet]
+        public ActionResult Testvideo()
+        {
+            String mail = Request.Cookies["Mycookie"].Value;
+            Users u = new Users();
+            using(MyDataBaseEntities dc = new MyDataBaseEntities())
+            {
+                var v = dc.Users.Where(a => a.Email == mail).FirstOrDefault();
+                ViewBag.name = v.FirstName;
+                return View();
+            }
+
+           
         }
 
     }
