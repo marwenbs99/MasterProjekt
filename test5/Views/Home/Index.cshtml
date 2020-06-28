@@ -40,7 +40,7 @@
             @if (item.IfManager == true)
             {
                 <button type="button" class="btn btn-outline-dark">@Html.ActionLink("Edit project", "EditProject", "Home", new { ID = item.ID }, null) </button>
-                <button type="button" class="btn btn-outline-dark">@Html.ActionLink("Add Partner", "EditProject", "Home", new { ID = item.ID }, null) </button>
+                <button type="button" class="btn btn-outline-dark">@Html.ActionLink("Add Partner", "AddPartner", "Project", new { ID = item.ID }, null) </button>
             }
             <button type="button" class="btn btn-info">@Html.ActionLink("Show", "Projectdetails", "Project", new { ID = item.ID }, null)</button>
 

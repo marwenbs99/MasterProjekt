@@ -293,6 +293,7 @@
       <DependentUpon>MyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Extended\Users.cs" />
+    <Compile Include="Models\MembreElem.cs" />
     <Compile Include="Models\Memebre.cs">
       <DependentUpon>MyModel.tt</DependentUpon>
     </Compile>
@@ -939,6 +940,7 @@
     <Content Include="Views\Home\EditProject.cshtml" />
     <Content Include="Views\Project\Projectdetails.cshtml" />
     <Content Include="Views\Project\AddPartner.cshtml" />
+    <Content Include="Views\Project\Testvideo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
