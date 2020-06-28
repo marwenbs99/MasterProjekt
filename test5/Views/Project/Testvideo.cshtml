@@ -1,94 +1,99 @@
-﻿
+﻿<html>
+<body>
+    <script>
 
-    <html>
-    <body>
-        <script>
 
-            function onVidyoClientLoaded(status) {
-                switch (status.state) {
-                    case "READY":
+        function onVidyoClientLoaded(status) {
+            switch (status.state) {
+                case "READY":
 
-                        VC.CreateVidyoConnector({
-                            viewId: "renderer",
-                            viewStyle: "VIDYO_CONNECTORVIEWSTYLE_Default",
-                            remoteParticipants: 8,
-                            logFileFilter: "warning info@VidyoClient info@VidyoConnector",
-                            logFileName: "",
-                            userData: ""
-                        }).then(function (vidyoConnector) {
-                            /*Handle appearance and disappearance of camera devices in the system*/
-                            vidyoConnector.RegisterLocalCameraEventListener({
-                                onAdded: function (localCamera) { },
-                                onRemoved: function (localCamera) { },
-                                onSelected: function (localCamera) { },
-                                onStateUpdated: function (localCamera, state) { }
-                            }).then(function () {
-                                console.log("RegisterLocalCameraEventListener Success");
-                            }).catch(function () {
-                                console.error("RegisterLocalCameraEventListener Failed");
-                            });
 
-                            /*Handle appearance and disappearance of microphone devices in the system*/
-                            vidyoConnector.RegisterLocalMicrophoneEventListener({
-                                onAdded: function (localMicrophone) { },
-                                onRemoved: function (localMicrophone) { },
-                                onSelected: function (localMicrophone) { },
-                                onStateUpdated: function (localMicrophone, state) { }
-                            }).then(function () {
-                                console.log("RegisterLocalMicrophoneEventListener Success");
-                            }).catch(function () {
-                                console.error("RegisterLocalMicrophoneEventListener Failed");
-                            });
+                    VC.CreateVidyoConnector({
+                        viewId: "renderer",
+                        viewStyle: "VIDYO_CONNECTORVIEWSTYLE_Default",
+                        remoteParticipants: 8,
+                        logFileFilter: "warning info@VidyoClient info@VidyoConnector",
+                        logFileName: "",
+                        userData: ""
+                    }).then(function (vidyoConnector) {
+                        /*Handle appearance and disappearance of camera devices in the system*/
+                        vidyoConnector.RegisterLocalCameraEventListener({
+                            onAdded: function (localCamera) { },
+                            onRemoved: function (localCamera) { },
+                            onSelected: function (localCamera) { },
+                            onStateUpdated: function (localCamera, state) { }
+                        }).then(function () {
+                            console.log("RegisterLocalCameraEventListener Success");
+                        }).catch(function () {
+                            console.error("RegisterLocalCameraEventListener Failed");
+                        });
 
-                            /*Handle appearance and disappearance of speaker devices in the system*/
-                            vidyoConnector.RegisterLocalSpeakerEventListener({
-                                onAdded: function (localSpeaker) { },
-                                onRemoved: function (localSpeaker) { },
-                                onSelected: function (localSpeaker) { },
-                                onStateUpdated: function (localSpeaker, state) { }
-                            }).then(function () {
-                                console.log("RegisterLocalSpeakerEventListener Success");
-                            }).catch(function () {
-                                console.error("RegisterLocalSpeakerEventListener Failed");
-                            });
-                            vidyoConnector.Connect({
-                                host: "prod.vidyo.io",
-                                token: 'cHJvdmlzaW9uAHVzZXIxQGNjMWViOS52aWR5by5pbwA2Mzc2MDU3MzUyMwAAMDA2MmQ5YTljNWU0YWEwNjY3MjQ1YzdhZTBkMzJkMjQ0YzFkMjhiNWU1MjkzZWM0NzMyOGYwMDQyMDIxOTFiYjU1NDZmYjA1ZjI1MmQ1NjA0ZmJlNzExODEyNmI2OGVm', //Generated Token
-                                displayName: "@ViewBag.name", //User Name
-                                resourceId: "demoroom", //Conference Name
-                                onSuccess: function () {
-                                    console.log("Sucessfully connected");
-                                },
-                                onFailure: function (reason) {
-                                    console.log("Error while connecting ", reason);
-                                },
-                                onDisconnected: function (reason) {
-                                    console.log("Disconnected ", reason);
-                                }
-                            }).then(function (status) {
+                        /*Handle appearance and disappearance of microphone devices in the system*/
+                        vidyoConnector.RegisterLocalMicrophoneEventListener({
+                            onAdded: function (localMicrophone) { },
+                            onRemoved: function (localMicrophone) { },
+                            onSelected: function (localMicrophone) { },
+                            onStateUpdated: function (localMicrophone, state) { }
+                        }).then(function () {
+                            console.log("RegisterLocalMicrophoneEventListener Success");
+                        }).catch(function () {
+                            console.error("RegisterLocalMicrophoneEventListener Failed");
+                        });
 
-                            }).catch(function () {
+                        /*Handle appearance and disappearance of speaker devices in the system*/
+                        vidyoConnector.RegisterLocalSpeakerEventListener({
+                            onAdded: function (localSpeaker) { },
+                            onRemoved: function (localSpeaker) { },
+                            onSelected: function (localSpeaker) { },
+                            onStateUpdated: function (localSpeaker, state) { }
+                        }).then(function () {
+                            console.log("RegisterLocalSpeakerEventListener Success");
+                        }).catch(function () {
+                            console.error("RegisterLocalSpeakerEventListener Failed");
+                        });
 
-                            });
+
+
+                        vidyoConnector.Connect({
+                            host: "prod.vidyo.io",
+                            token: 'cHJvdmlzaW9uAHVzZXIxQGNjMWViOS52aWR5by5pbwA2Mzc2MDU3OTk0MAAAZWExMzEwNzlmMGRmNDRmMjRmYjBkNmUxNzNlMWVkOTBkZjJiYjg1YWI5MDcxNDhmMTdlNzVmYTFlOGE1NDY1NGUzN2ZjMzYwNmFhNDJmMGViNjA4YWJhMjE5ZjFmN2Y0', //Generated Token
+                            displayName: "user1", //User Name
+                            resourceId: "demoroom", //Conference Name
+                            onSuccess: function () {
+                                console.log("Sucessfully connected");
+                            },
+                            onFailure: function (reason) {
+                                console.log("Error while connecting ", reason);
+                            },
+                            onDisconnected: function (reason) {
+                                console.log("Disconnected ", reason);
+                            }
+                        }).then(function (status) {
+
+                        }).catch(function () {
 
                         });
 
-                        break;
-                    case "RETRYING":
-                        break;
-                    case "FAILED":
-                        break;
-                    case "FAILEDVERSION":
-                        break;
-                    case "NOTAVAILABLE":
-                        break;
-                }
-                return true;
-            }
 
-        </script>
-        
-        <div id="renderer" style="position: absolute; top: 41px; left: 3px; bottom: -23px; z-index: 99; height: 300px; width: 600px;"></div>
-        <script src="https://static.vidyo.io/latest/javascript/VidyoClient/VidyoClient.js?onload=onVidyoClientLoaded&webrtc=true&plugin=false"></script>
-    </body>
-    </html>
+                    });
+
+
+                    break;
+                case "RETRYING":
+                    break;
+                case "FAILED":
+                    break;
+                case "FAILEDVERSION":
+                    break;
+                case "NOTAVAILABLE":
+                    break;
+            }
+            return true;
+        }
+
+
+    </script>
+    <div id="renderer" style="position: absolute; top: 41px; left: 3px; bottom: -23px; z-index: 99; height: 300px; width: 300px;"></div>
+    <script src="https://static.vidyo.io/latest/javascript/VidyoClient/VidyoClient.js?onload=onVidyoClientLoaded&webrtc=true&plugin=false"></script>
+</body>
+</html>

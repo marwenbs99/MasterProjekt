@@ -121,7 +121,7 @@ namespace test5.Controllers
             }
 
         }
-
+        [Authorize]
         [HttpGet]
         public ActionResult Testvideo()
         {
